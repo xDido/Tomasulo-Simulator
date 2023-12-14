@@ -353,38 +353,38 @@ public class Main {
 		}
 	}
 
-	public static void main(String[] args) {
-		String[] inputValues = new String[8];
-		Scanner obj = new Scanner(System.in);
-		System.out.println("Enter size of mul reservation station");
-		inputValues[0] = obj.nextLine();
-		System.out.println("Enter size of add reservation station");
-		inputValues[1] = obj.nextLine();
-		System.out.println("Enter size of load reservation station");
-		inputValues[2] = obj.nextLine();
-		System.out.println("Enter size of store reservation station");
-		inputValues[3] = obj.nextLine();
-		System.out.println("Enter number of mul cycles");
-		inputValues[4] = obj.nextLine();
-		System.out.println("Enter number of add cycles");
-		inputValues[5] = obj.nextLine();
-		System.out.println("Enter number of load cycles");
-		inputValues[6] = obj.nextLine();
-		System.out.println("Enter number of store cycles");
-		inputValues[7]= obj.nextLine();
-		System.out.println(mulspace + " " + addspace + " " + loadspace + " " + storespace);
-		System.out.println(mulcount + " " + addcount + " " + loadcount + " " + storecount);
-		obj.close();
-//		int[] inputvalues = {2,3,3,3,8,3,2,2};
-		int[] inputvalues = new int[8];
-		for (int i = 0; i < 8; i++) {
-        	try {
-        		inputvalues[i] = Integer.parseInt(inputValues[i]);
-        	} catch(NumberFormatException e) {
-        		inputvalues[i] = 3;
-        	}	
-        }
-		Main main = new Main(inputvalues);
-		main.run();
-	}
+//	public static void main(String[] args) {
+//		String[] inputValues = new String[8];
+//		Scanner obj = new Scanner(System.in);
+//		System.out.println("Enter size of mul reservation station");
+//		inputValues[0] = obj.nextLine();
+//		System.out.println("Enter size of add reservation station");
+//		inputValues[1] = obj.nextLine();
+//		System.out.println("Enter size of load reservation station");
+//		inputValues[2] = obj.nextLine();
+//		System.out.println("Enter size of store reservation station");
+//		inputValues[3] = obj.nextLine();
+//		System.out.println("Enter number of mul cycles");
+//		inputValues[4] = obj.nextLine();
+//		System.out.println("Enter number of add cycles");
+//		inputValues[5] = obj.nextLine();
+//		System.out.println("Enter number of load cycles");
+//		inputValues[6] = obj.nextLine();
+//		System.out.println("Enter number of store cycles");
+//		inputValues[7]= obj.nextLine();
+//		System.out.println(mulspace + " " + addspace + " " + loadspace + " " + storespace);
+//		System.out.println(mulcount + " " + addcount + " " + loadcount + " " + storecount);
+//		obj.close();
+////		int[] inputvalues = {2,3,3,3,8,3,2,2};
+//		int[] inputvalues = new int[8];
+//		for (int i = 0; i < 8; i++) {
+//        	try {
+//        		inputvalues[i] = Integer.parseInt(inputValues[i]);
+//        	} catch(NumberFormatException e) {
+//        		inputvalues[i] = 3;
+//        	}
+//        }
+//		Main main = new Main(inputvalues);
+//		main.run();
+//	}
 }

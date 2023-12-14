@@ -1,0 +1,11 @@
+# Eclipse
+.project
+.classpath
+**/bin/
+.settings/
+
+# IntelliJ IDEA
+.idea/
+
+# Other
+out/
