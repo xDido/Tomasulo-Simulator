@@ -1,4 +1,4 @@
-# Tomasulo's simulator
+# Tomasulo's Algorithm simulator
 [Tomasulo's algorithm](https://en.wikipedia.org/wiki/Tomasulo_algorithm) is a computer architecture hardware algorithm developed by Robert Tomasulo at IBM in 1967. It is designed for the dynamic scheduling of instructions, allowing for out-of-order execution and facilitating more efficient utilization of multiple execution units within a processor. This groundbreaking algorithm was first implemented in the floating-point unit of the IBM System/360 Model 91.
 
 Tomasulo's algorithm has played a pivotal role in the world of microprocessors. Its contribution to dynamic instruction scheduling has become a fundamental aspect of modern processor design. Many microprocessor architectures around the world incorporate variants or adaptations of Tomasulo's algorithm to enhance the execution efficiency of instructions, making it a widely influential and adopted technique in the field of computer architecture.
