@@ -6,4 +6,4 @@ Tomasulo's algorithm has played a pivotal role in the world of microprocessors. 
 ## The idea
 I wanted to make an easy way to track the algorithm on different programs without paper and pen, I guess this will be much more efficient.
 ## How to run 
-just download the **Tomasulo.jar** file and it will open a sequence of different input fields where you have to specify the Multiplication, addition, load, and store execution clock cycles count + the capacity of the reservation stations for each one of them then you will encounter a basic GUI where there's a Next button to proceed for the next clock cycle.
+fork the repo then add your instructions to the file called instructions open the **Tomasulo.jar** file and it will open a sequence of different input fields where you have to specify the Multiplication, addition, load, and store execution clock cycles count + the capacity of the reservation stations for each one of them then you will encounter a basic GUI where there's a Next button to proceed for the next clock cycle.
