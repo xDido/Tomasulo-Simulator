@@ -230,7 +230,7 @@ public class GUI {
 
         // Update ADD stations
         updateTableRows(addTable,
-                main.getReservationStations().getTagadd(),
+                main.getReservationStations().getTagAdd(),
                 main.getReservationStations().getOpadd(),
                 main.getReservationStations().getBusyadd(),
                 main.getReservationStations().getVjadd(),

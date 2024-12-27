@@ -39,7 +39,6 @@ public class ReservationStations {
 		Load(load);
 		Store(store);
 	}
-
 	//getters for GUI
 	public String[] getTagmul() {
 		return tagmul;
@@ -62,7 +61,7 @@ public class ReservationStations {
 	public String[] getQkmul() {
 		return qkmul;
 	}
-	public String[] getTagadd() {
+	public String[] getTagAdd() {
 		return tagadd;
 	}
 	public int[] getBusyadd() {
@@ -89,31 +88,30 @@ public class ReservationStations {
 	public int[] getBusyload() {
 		return busyload;
 	}
-	public String[] getAddressload() {
-		String[] result = new String[addressload.length];
-		for(int i=0;i<addressload.length;i++) {
-			if(addressload[i]==-1)
-				result[i] = "";
-			else
-				result[i] = ""+addressload[i];
-		}
-		return result;
-	}
 	public String[] getTagstore() {
 		return tagstore;
 	}
 	public int[] getBusystore() {
 		return busystore;
 	}
-	public String[] getAddressstore() {
-		String[] result = new String[addressstore.length];
-		for(int i=0;i<addressstore.length;i++) {
-			if(addressstore[i]==-1)
+
+	private String[] getStrings(int[] address) {
+		String[] result = new String[address.length];
+		for (int i = 0; i < address.length; i++) {
+			if (address[i] == -1)
 				result[i] = "";
 			else
-				result[i] = ""+addressstore[i];
+				result[i] = "" + address[i];
 		}
 		return result;
+	}
+
+	public String[] getAddressstore() {
+		return getStrings(addressstore);
+	}
+
+	public String[] getAddressload() {
+		return getStrings(addressload);
 	}
 	public String[] getVstore() {
 		return vstore;
@@ -335,61 +333,55 @@ public class ReservationStations {
 	}
 	//sets a place in the reservation station based on the operation 
 	//step 2 issuing
+	//Helper to find free index in memory will be used for store/load.
+	private int findFreeIndexAndMarkBusy(int[] busyArray) {
+		for (int i = 0; i < busyArray.length; i++) {
+			if (busyArray[i] == 0) {
+				busyArray[i] = 1;
+				return i;
+			}
+		}
+		return -1; // Indicating no free index is found
+	}
+
+	//Helper to avoid code redundancy.
+	private void LoopMetadata(String op, String vj, String vk, String qj, String qk, int address, int line, int n, String[] tagmul, int[] busymul, String[] opmul, String[] vjmul, String[] vkmul, String[] qjmul, String[] qkmul, int[] addressmul, int[] linemul) {
+		for (int i = 0; i < tagmul.length; i++) {
+			if (busymul[i] == 0) {
+				n = i;
+				break;
+			}
+		}
+		busymul[n] = 1;
+		opmul[n] = op;
+		vjmul[n] = vj;
+		vkmul[n] = vk;
+		qjmul[n] = qj;
+		qkmul[n] = qk;
+		addressmul[n] = address;
+		linemul[n] = line;
+	}
 	public void setOccupied(String op, String vj, String vk, String qj, String qk, int address, int line) {
 		int n = -1;
 		if(op.contains("MUL") || op.contains("DIV")) {
-			for(int i = 0;i < tagmul.length; i++) {
-				if(busymul[i]==0) {
-					n=i;
-					break;
-				}
-			}
-			busymul[n]=1;
-			opmul[n] = op;
-			vjmul[n] = vj;
-			vkmul[n] = vk;
-			qjmul[n] = qj;
-			qkmul[n] = qk;
-			addressmul[n] = address;
-			linemul[n] = line;
+			LoopMetadata(op, vj, vk, qj, qk, address, line, n, tagmul, busymul, opmul, vjmul, vkmul, qjmul, qkmul, addressmul, linemul);
 		} else if(op.contains("ADD") || op.contains("SUB") || op.startsWith("BNEZ")){
-			for(int i = 0;i < tagadd.length; i++) {
-				if(busyadd[i]==0) {
-					n=i;
-					break;
-				}
-			}
-			busyadd[n]=1;
-			opadd[n] = op;
-			vjadd[n] = vj;
-			vkadd[n] = vk;
-			qjadd[n] = qj;
-			qkadd[n] = qk;
-			addressadd[n] = address;
-			lineadd[n] = line;
+			LoopMetadata(op, vj, vk, qj, qk, address, line, n, tagadd, busyadd, opadd, vjadd, vkadd, qjadd, qkadd, addressadd, lineadd);
 		} else if(op.startsWith("L")) {
-			for(int i = 0;i < tagload.length; i++) {
-				if(busyload[i]==0) {
-					n=i;
-					break;
-				}
+			n = findFreeIndexAndMarkBusy(busyload);
+			if (n != -1) {
+				addressload[n] = address;
+				lineload[n] = line;
 			}
-			busyload[n]=1;
-			addressload[n] = address;
-			lineload[n] = line;
-		} else if(op.startsWith("S")) {
-			for(int i = 0;i < tagstore.length; i++) {
-				if(busystore[i]==0) {
-					n=i;
-					break;
-				}
-			}
-			busystore[n]=1;
-			addressstore[n] = address;
-			vstore[n] = vj;
-			qstore[n] = qj;
-			linestore[n] = line;
+		} else if (op.startsWith("S")) {
+			n = findFreeIndexAndMarkBusy(busystore);
+			if (n != -1) {
+				addressstore[n] = address;
+				vstore[n] = vj;
+				qstore[n] = qj;
+				linestore[n] = line;
 		}
+	}
 	}
 	//checks if a reservation station is waiting for another based on Qj,Qk for mul and add, or Qstore for store
 	//step 3 before executing
@@ -411,26 +403,8 @@ public class ReservationStations {
 	//sets value of waiting registers with the value written back if tag in Q matches tag of instruction writing back
 	//step 4 write
 	public void writeWaiting(String tagdestination, String value) {
-		for(int i=0;i<qjmul.length;i++) {
-			if(qjmul[i].equals(tagdestination)) {
-				vjmul[i] = value;
-				qjmul[i] = "0";
-			}
-			if(qkmul[i].equals(tagdestination)) {
-				vkmul[i] = value;
-				qkmul[i] = "0";
-			}
-		}
-		for(int i=0;i<qjadd.length;i++) {
-			if(qjadd[i].equals(tagdestination)) {
-				vjadd[i] = value;
-				qjadd[i] = "0";
-			}
-			if(qkadd[i].equals(tagdestination)) {
-				vkadd[i] = value;
-				qkadd[i] = "0";
-			}
-		}
+		LoopWaitWriting(tagdestination, value, qjmul, vjmul, qkmul, vkmul);
+		LoopWaitWriting(tagdestination, value, qjadd, vjadd, qkadd, vkadd);
 		for(int i=0;i<qstore.length;i++) {
 			if(qstore[i].equals(tagdestination)) {
 				vstore[i] = value;
@@ -438,6 +412,20 @@ public class ReservationStations {
 			}
 		}
 	}
+
+	private void LoopWaitWriting(String tagdestination, String value, String[] qjmul, String[] vjmul, String[] qkmul, String[] vkmul) {
+		for (int i = 0; i < qjmul.length; i++) {
+			if (qjmul[i].equals(tagdestination)) {
+				vjmul[i] = value;
+				qjmul[i] = "0";
+			}
+			if (qkmul[i].equals(tagdestination)) {
+				vkmul[i] = value;
+				qkmul[i] = "0";
+			}
+		}
+	}
+
 	//removes instruction from the reservation station
 	//step 5 write
 	public void setAvailable(int line) {
@@ -473,28 +461,25 @@ public class ReservationStations {
 			linestore[n] = -1;
 		}	
 	}
-	
-	public String toString() {
-		System.out.println("--------------------------Mul--------------------------");
-		System.out.println("Tag | Op |  Busy | Vj | Vq | Qj | Qk | A");
-		for(int i=0;i<tagmul.length;i++) {
-			System.out.print(tagmul[i] + "  | " + opmul[i] + " |  " + busymul[i] + "   | " + vjmul[i] + " | " + vkmul[i] + " | " + qjmul[i] + " | " + qkmul[i] + " | ");
+	private void MulAddToString(String[] tagmul, String[] opmul, int[] busymul, String[] vjmul, String[] vkmul, String[] qjmul, String[] qkmul, int[] addressmul) {
+		for(int i = 0; i< tagmul.length; i++) {
+			System.out.print(tagmul[i] + " " +
+					" | " + opmul[i] + " |  " + busymul[i] + "   | " + vjmul[i] + " | " + vkmul[i] + " | " + qjmul[i] + " | " + qkmul[i] + " | ");
 			if(addressmul[i] != -1) {
 				System.out.println(addressmul[i]);
 			} else {
 				System.out.println();
 			}
 		}
+	}
+
+	public String toString() {
+		System.out.println("--------------------------Mul--------------------------");
+		System.out.println("Tag | Op |  Busy | Vj | Vq | Qj | Qk | A");
+		MulAddToString(tagmul, opmul, busymul, vjmul, vkmul, qjmul, qkmul, addressmul);
 		System.out.println("--------------------------Add--------------------------");
 		System.out.println("Tag | Op | Busy | Vj | Vq | Qj | Qk | A");
-		for(int i=0;i<tagadd.length;i++) {
-			System.out.print(tagadd[i] + "  | " + opadd[i] + " |  " + busyadd[i] + "   | " + vjadd[i] + " | " + vkadd[i] + " | " + qjadd[i] + " | " + qkadd[i] + " | ");
-			if(addressadd[i] != -1) {
-				System.out.println(addressadd[i]);
-			} else {
-				System.out.println();
-			}
-		}
+		MulAddToString(tagadd, opadd, busyadd, vjadd, vkadd, qjadd, qkadd, addressadd);
 		System.out.println("-------------------------Load-------------------------");
 		System.out.println("Tag | Busy | Address");
 		for(int i=0;i<tagload.length;i++) {
@@ -517,4 +502,5 @@ public class ReservationStations {
 		}
 		return "";
 	}
+
 }
