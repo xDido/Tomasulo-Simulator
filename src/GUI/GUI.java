@@ -2,7 +2,8 @@ package GUI;
 
 import Memory.Instruction;
 import Process.Main;
-
+import java.awt.Toolkit;
+import java.awt.Dimension;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -75,7 +76,13 @@ public class GUI {
         frame.add(createRegisterFilePanel(), BorderLayout.EAST);
         frame.add(createNextButton(), BorderLayout.SOUTH);
 
-        frame.pack();
+        // Get the screen size
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int frameWidth = (int) (screenWidth * 0.8);
+        int frameHeight = (int) (screenHeight * 0.8);
+        frame.setSize(frameWidth, frameHeight);
         frame.setLocationRelativeTo(null);
         return frame;
     }
